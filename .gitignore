@@ -1,4 +1,20 @@
-# Logs
+# Archivos de entorno y credenciales (CRÍTICO DE SEGURIDAD)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+
+# Dependencias instaladas y artefactos de compilación
+node_modules
+dist
+dist-ssr
+build
+*.local
+
+# Logs de ejecución
 logs
 *.log
 npm-debug.log*
@@ -7,18 +23,21 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# Directorios y archivos del editor (VS Code, IntelliJ, etc.)
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Archivos del sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
