@@ -19,4 +19,19 @@ API.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
+// Si el backend responde 401 en una ruta privada, el token venció o no es válido:
+// cerramos la sesión y volvemos al login. Los 401 del propio login se dejan pasar para mostrar el error
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const isAuthRequest = error.config?.url?.startsWith('/auth/')
+    if (error.response?.status === 401 && !isAuthRequest) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      window.location.assign('/login?sesion=expirada')
+    }
+    return Promise.reject(error)
+  },
+)
+
 export default API

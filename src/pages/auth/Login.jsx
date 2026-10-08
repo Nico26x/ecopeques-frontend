@@ -1,6 +1,6 @@
 import { Lock, LogIn, Mail } from 'lucide-react'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import AuthLayout from '../../components/common/AuthLayout'
 import Alert from '../../components/ui/Alert'
 import Button from '../../components/ui/Button'
@@ -26,6 +26,9 @@ const validate = (form) => {
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
+  const sessionExpired = searchParams.get('sesion') === 'expirada'
 
   const [form, setForm] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
@@ -49,7 +52,8 @@ export default function Login() {
     setLoading(true)
     try {
       await login({ email: form.email.trim(), password: form.password })
-      navigate('/inicio', { replace: true })
+      // Vuelve a la página que el tutor intentaba abrir, o al inicio
+      navigate(location.state?.from || '/inicio', { replace: true })
     } catch (error) {
       // 401 = correo o contraseña incorrectos (CA-2.2)
       setServerError(getErrorMessage(error))
@@ -62,6 +66,9 @@ export default function Login() {
   return (
     <AuthLayout title="¡Hola de nuevo!" subtitle="Inicia sesión para seguir cuidando el planeta 🌎">
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
+        {sessionExpired && !serverError && (
+          <Alert>Tu sesión expiró. Vuelve a iniciar sesión.</Alert>
+        )}
         <Alert>{serverError}</Alert>
 
         <Input
