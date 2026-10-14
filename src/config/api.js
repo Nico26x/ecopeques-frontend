@@ -19,13 +19,17 @@ API.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-// Si el backend responde 401 en una ruta privada, el token venció o no es válido:
-// cerramos la sesión y volvemos al login. Los 401 del propio login se dejan pasar para mostrar el error
+// Si el token venció o no es válido, cerramos la sesión y volvemos al login.
+// El backend responde 401, o 403 sin "message" cuando la petición llega sin un token válido.
+// Un 403 con "message" es otra cosa (por ejemplo, ver niños de otro tutor) y se deja pasar.
+// Los errores del propio login y registro también se dejan pasar para mostrarlos en el formulario
 API.interceptors.response.use(
   (response) => response,
   (error) => {
+    const status = error.response?.status
     const isAuthRequest = error.config?.url?.startsWith('/auth/')
-    if (error.response?.status === 401 && !isAuthRequest) {
+    const tokenInvalido = status === 401 || (status === 403 && !error.response?.data?.message)
+    if (tokenInvalido && !isAuthRequest) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
       window.location.assign('/login?sesion=expirada')
