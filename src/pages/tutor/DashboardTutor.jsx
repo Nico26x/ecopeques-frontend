@@ -1,6 +1,5 @@
-import { LoaderCircle, LogOut, Plus } from 'lucide-react'
+import { LoaderCircle, Plus } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import logo from '../../assets/logo-ecopeques.png'
 import NinoCard from '../../components/ninos/NinoCard'
 import NinoForm from '../../components/ninos/NinoForm'
 import Alert from '../../components/ui/Alert'
@@ -9,9 +8,9 @@ import Modal from '../../components/ui/Modal'
 import { useAuth } from '../../hooks/useAuth'
 import { getNinoErrorMessage, listarNinosService } from '../../services/ninoService'
 
-// Panel del tutor: lista de niños a su cargo y botón para agregar uno nuevo (ST-03.6)
+// Pantalla "Mis niños" del tutor: lista de niños a su cargo y botón para agregar uno nuevo (ST-03.6)
 export default function DashboardTutor() {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
 
   const [ninos, setNinos] = useState([])
   const [loading, setLoading] = useState(true)
@@ -51,26 +50,7 @@ export default function DashboardTutor() {
   }
 
   return (
-    <div className="min-h-svh">
-      <header className="rounded-b-[2rem] bg-gradient-to-br from-eco-500 to-eco-700 px-4 pb-8 pt-6 text-white shadow-lg">
-        <div className="mx-auto flex max-w-2xl items-center gap-3">
-          <img src={logo} alt="" className="size-12 rounded-full bg-white p-0.5" />
-          <div className="min-w-0 flex-1">
-            <p className="text-sm text-eco-100">{user?.rol === 'DOCENTE' ? 'Docente' : 'Padre o madre'}</p>
-            <h1 className="truncate text-2xl font-extrabold">¡Hola, {user?.nombre}! 🌱</h1>
-          </div>
-          <button
-            type="button"
-            onClick={logout}
-            aria-label="Cerrar sesión"
-            className="flex items-center gap-2 rounded-2xl bg-white/20 px-3 py-2 text-sm font-bold hover:bg-white/30"
-          >
-            <LogOut className="size-5" aria-hidden="true" />
-            <span className="hidden sm:inline">Cerrar sesión</span>
-          </button>
-        </div>
-      </header>
-
+    <>
       <main className="mx-auto max-w-2xl space-y-4 px-4 py-6">
         <div className="flex items-center justify-between gap-4">
           <h2 className="whitespace-nowrap text-xl font-extrabold text-eco-900">Mis niños</h2>
@@ -107,6 +87,6 @@ export default function DashboardTutor() {
       <Modal open={modalOpen} title="Nuevo perfil" onClose={cerrarModal}>
         <NinoForm onCreated={handleCreated} />
       </Modal>
-    </div>
+    </>
   )
 }
