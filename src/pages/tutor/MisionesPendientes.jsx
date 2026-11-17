@@ -1,4 +1,4 @@
-import { LoaderCircle } from 'lucide-react'
+import { Droplets, LoaderCircle } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ConfirmarMisionForm from '../../components/misiones/ConfirmarMisionForm'
@@ -9,6 +9,7 @@ import { getAvatar } from '../../constants/avatares'
 import { useAuth } from '../../hooks/useAuth'
 import { getMisionErrorMessage, listarPendientesService } from '../../services/misionService'
 import { listarNinosService } from '../../services/ninoService'
+import { agregarPorRegar } from '../../utils/porRegar'
 
 // Panel "Misiones pendientes" del tutor (ST-06.4): misiones en progreso agrupadas por niño,
 // cada una con su botón para confirmar el cumplimiento (HU-06)
@@ -21,6 +22,7 @@ export default function MisionesPendientes() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [elegida, setElegida] = useState(null)
+  const [ninoParaRegar, setNinoParaRegar] = useState(null)
 
   // Traemos a la vez las misiones pendientes y los niños (para mostrar nombre y avatar)
   useEffect(() => {
@@ -51,6 +53,7 @@ export default function MisionesPendientes() {
 
   const abrirConfirmacion = (asignacion) => {
     setSuccess('')
+    setNinoParaRegar(null)
     setElegida(asignacion)
   }
 
@@ -58,8 +61,11 @@ export default function MisionesPendientes() {
 
   const handleConfirmada = (confirmada) => {
     const nino = buscarNino(confirmada.ninoId)
+    // Queda guardada para que el niño riegue su árbol y reciba las semillas (HU-07)
+    agregarPorRegar(confirmada)
     setPendientes((actuales) => actuales.filter((item) => item.id !== confirmada.id))
     setSuccess(`¡Bien hecho, ${nino?.nombre ?? 'campeón'}! Confirmamos "${confirmada.tituloMision}".`)
+    setNinoParaRegar(nino ?? null)
     setElegida(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -72,6 +78,15 @@ export default function MisionesPendientes() {
       </div>
 
       <Alert type="success">{success}</Alert>
+      {success && ninoParaRegar && (
+        <Link
+          to={`/jugar/${ninoParaRegar.id}`}
+          className="flex items-center justify-center gap-2 rounded-2xl bg-sky-500 px-4 py-3 font-bold text-white shadow-md transition hover:bg-sky-600"
+        >
+          <Droplets className="size-5" aria-hidden="true" />
+          Que {ninoParaRegar.nombre} riegue su árbol
+        </Link>
+      )}
       <Alert>{error}</Alert>
 
       {loading ? (
@@ -124,4 +139,3 @@ export default function MisionesPendientes() {
     </main>
   )
 }
-
