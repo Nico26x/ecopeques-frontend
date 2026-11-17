@@ -4,6 +4,7 @@ import PublicRoute from '../components/common/PublicRoute'
 import TutorLayout from '../components/layout/TutorLayout'
 import Login from '../pages/auth/Login'
 import Register from '../pages/auth/Register'
+import ModoNino from '../pages/nino/ModoNino'
 import CatalogoMisiones from '../pages/tutor/CatalogoMisiones'
 import DashboardTutor from '../pages/tutor/DashboardTutor'
 import MisionesPendientes from '../pages/tutor/MisionesPendientes'
@@ -25,6 +26,8 @@ export default function AppRouter() {
             <Route path="/misiones" element={<CatalogoMisiones />} />
             <Route path="/pendientes" element={<MisionesPendientes />} />
           </Route>
+          {/* Modo niño (HU-07): pantalla completa, sin el menú del tutor */}
+          <Route path="/jugar/:ninoId" element={<ModoNino />} />
         </Route>
 
         {/* Cualquier otra ruta lleva al login (y si ya hay sesión, PublicRoute lo manda a /inicio) */}

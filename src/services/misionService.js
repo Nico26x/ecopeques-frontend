@@ -68,3 +68,10 @@ export const getConfirmacionError = (error) => {
   if (status === 413) return 'La foto es muy pesada. Prueba con otra.'
   return data?.message || 'No pudimos confirmar la misión. Intenta de nuevo'
 }
+
+// Suma al niño las semillas de una misión COMPLETADA (CA-7.1). El backend solo las suma
+// una vez: si se repite responde 409 y el saldo no cambia (RN-02)
+export const acreditarMisionService = async (id) => {
+  const { data } = await API.put(`/misiones-ninos/${id}/acreditar`)
+  return data
+}

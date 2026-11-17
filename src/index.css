@@ -14,3 +14,32 @@
 body {
   @apply bg-eco-50 font-sans text-eco-900 antialiased;
 }
+
+/* Animaciones del árbol virtual (HU-07) */
+@keyframes crecer {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25) rotate(-4deg); }
+  70% { transform: scale(0.95) rotate(3deg); }
+  100% { transform: scale(1); }
+}
+
+@keyframes gota {
+  0% { transform: translateY(-40px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(70px); opacity: 0; }
+}
+
+.animate-crecer {
+  animation: crecer 0.9s ease-in-out 2;
+}
+
+.animate-gota {
+  animation: gota 0.9s ease-in infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-crecer,
+  .animate-gota {
+    animation: none;
+  }
+}
