@@ -6,6 +6,7 @@ import Login from '../pages/auth/Login'
 import Register from '../pages/auth/Register'
 import CatalogoMisiones from '../pages/tutor/CatalogoMisiones'
 import DashboardTutor from '../pages/tutor/DashboardTutor'
+import MisionesPendientes from '../pages/tutor/MisionesPendientes'
 
 export default function AppRouter() {
   return (
@@ -22,6 +23,7 @@ export default function AppRouter() {
           <Route element={<TutorLayout />}>
             <Route path="/inicio" element={<DashboardTutor />} />
             <Route path="/misiones" element={<CatalogoMisiones />} />
+            <Route path="/pendientes" element={<MisionesPendientes />} />
           </Route>
         </Route>
 
