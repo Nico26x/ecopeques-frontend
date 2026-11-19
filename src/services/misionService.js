@@ -42,3 +42,36 @@ export const getAsignacionError = (error) => {
   if (status === 403) return { limite: false, mensaje: 'No puedes asignar misiones a este niño.' }
   return { limite: false, mensaje: mensaje || 'No pudimos asignar la misión. Intenta de nuevo' }
 }
+
+// Misiones EN_PROGRESO de todos los niños del tutor, las más recientes primero (ST-06.4)
+export const listarPendientesService = async () => {
+  const { data } = await API.get('/misiones-ninos/tutor/pendientes')
+  return data
+}
+
+// El tutor confirma que el niño cumplió la misión (CA-6.1). La evidencia es opcional:
+// una URL o una foto en base64 ("data:image/..."). El backend la deja COMPLETADA
+export const confirmarMisionService = async (id, evidencia) => {
+  const { data } = await API.put(`/misiones-ninos/${id}/confirmar`, evidencia ? { evidencia } : {})
+  return data
+}
+
+// Errores al confirmar una misión
+export const getConfirmacionError = (error) => {
+  if (!error.response) {
+    return 'No se pudo conectar con el servidor. ¿Está encendido el backend?'
+  }
+  const { status, data } = error.response
+  if (status === 409) return 'Esta misión ya fue confirmada. Actualiza la lista.'
+  if (status === 404) return 'Esta misión ya no existe.'
+  if (status === 403) return 'No puedes confirmar misiones de este niño.'
+  if (status === 413) return 'La foto es muy pesada. Prueba con otra.'
+  return data?.message || 'No pudimos confirmar la misión. Intenta de nuevo'
+}
+
+// Suma al niño las semillas de una misión COMPLETADA (CA-7.1). El backend solo las suma
+// una vez: si se repite responde 409 y el saldo no cambia (RN-02)
+export const acreditarMisionService = async (id) => {
+  const { data } = await API.put(`/misiones-ninos/${id}/acreditar`)
+  return data
+}

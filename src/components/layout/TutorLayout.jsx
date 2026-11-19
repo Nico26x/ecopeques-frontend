@@ -1,4 +1,4 @@
-import { BookOpen, LogOut, Users } from 'lucide-react'
+import { BookOpen, ClipboardCheck, LogOut, Users } from 'lucide-react'
 import { NavLink, Outlet } from 'react-router-dom'
 import logo from '../../assets/logo-ecopeques.png'
 import { useAuth } from '../../hooks/useAuth'
@@ -6,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth'
 const SECCIONES = [
   { to: '/inicio', label: 'Mis niños', icon: Users },
   { to: '/misiones', label: 'Misiones', icon: BookOpen },
+  { to: '/pendientes', label: 'Pendientes', icon: ClipboardCheck },
 ]
 
 // Marco común de las pantallas del tutor: encabezado verde arriba y menú de pestañas abajo.
