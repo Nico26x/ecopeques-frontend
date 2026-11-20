@@ -41,3 +41,6 @@ lerna-debug.log*
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Capturas de las pruebas Selenium que fallan
+e2e/capturas/
